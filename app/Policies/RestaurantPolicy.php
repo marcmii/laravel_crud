@@ -15,7 +15,15 @@ class RestaurantPolicy
 
     public function view(?User $user, Restaurant $restaurant): bool
     {
-        return true;
+        if ($restaurant->is_active) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $restaurant);
     }
 
     public function create(User $user): bool
@@ -31,15 +39,5 @@ class RestaurantPolicy
     public function delete(User $user, Restaurant $restaurant): bool
     {
         return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $restaurant);
-    }
-
-    public function restore(User $user, Restaurant $restaurant): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
-    }
-
-    public function forceDelete(User $user, Restaurant $restaurant): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
     }
 }

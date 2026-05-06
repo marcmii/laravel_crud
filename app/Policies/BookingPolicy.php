@@ -15,7 +15,7 @@ class BookingPolicy
 
     public function view(User $user, Booking $booking): bool
     {
-        return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $booking);
+        return Gate::forUser($user)->allows('is_admin') || $booking->user_id === $user->id;
     }
 
     public function create(User $user): bool
@@ -25,21 +25,11 @@ class BookingPolicy
 
     public function update(User $user, Booking $booking): bool
     {
-        return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $booking);
+        return Gate::forUser($user)->allows('is_admin') || $booking->user_id === $user->id;
     }
 
     public function delete(User $user, Booking $booking): bool
     {
-        return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $booking);
-    }
-
-    public function restore(User $user, Booking $booking): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
-    }
-
-    public function forceDelete(User $user, Booking $booking): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
+        return Gate::forUser($user)->allows('is_admin') || $booking->user_id === $user->id;
     }
 }

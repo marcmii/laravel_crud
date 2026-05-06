@@ -32,14 +32,4 @@ class CategoryPolicy
     {
         return Gate::forUser($user)->allows('is_admin');
     }
-
-    public function restore(User $user, Category $category): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
-    }
-
-    public function forceDelete(User $user, Category $category): bool
-    {
-        return Gate::forUser($user)->allows('is_admin');
-    }
 }
