@@ -1,1 +1,1 @@
-LINK A LA PROPOSTA -> https://docs.google.com/document/d/1uZY1Pf477oW9EAlcO-NG3W5yU25Q-YpniRL_D4QaU2I/edit?usp=sharing
+LINK A LA PROPOSTA -> [https://docs.google.com/document/d/1uZY1Pf477oW9EAlcO-NG3W5yU25Q-YpniRL_D4QaU2I/edit?usp=sharing](https://drive.google.com/file/d/1DY4xal4RC2GTQUgXyFhtrgV0hBqvN__W/view?usp=sharing)
