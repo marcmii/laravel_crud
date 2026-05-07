@@ -38,6 +38,6 @@ class RestaurantPolicy
 
     public function delete(User $user, Restaurant $restaurant): bool
     {
-        return Gate::forUser($user)->allows('is_admin') || Gate::forUser($user)->allows('is_owner', $restaurant);
+        return Gate::forUser($user)->allows('is_admin');
     }
 }

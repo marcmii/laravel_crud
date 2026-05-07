@@ -56,9 +56,13 @@
     </div>
 
     <div class="md:col-span-2">
-        <label class="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
-            <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $restaurant->is_active ?? true)) class="rounded border-slate-300 text-slate-900">
-            Restaurant actiu
-        </label>
+        <label for="is_active" class="mb-2 block text-sm font-medium text-slate-700">Visibilitat</label>
+        <select id="is_active" name="is_active" class="w-full rounded-lg border-slate-300">
+            <option value="1" @selected((string) old('is_active', (int) ($restaurant->is_active ?? true)) === '1')>Públic</option>
+            <option value="0" @selected((string) old('is_active', (int) ($restaurant->is_active ?? true)) === '0')>Privat</option>
+        </select>
+        <p class="mt-2 text-sm text-slate-500">
+            Els restaurants públics els pot veure tothom. Els privats només els veu el propietari i l'administrador.
+        </p>
     </div>
 </div>

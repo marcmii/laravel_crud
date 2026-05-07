@@ -50,7 +50,7 @@ class ReservationCrudTest extends TestCase
         $this->get(route('restaurants.show', $privateRestaurant))->assertForbidden();
     }
 
-    public function test_regular_user_can_crud_only_their_own_restaurants(): void
+    public function test_regular_user_can_create_and_update_only_their_own_restaurants_but_cannot_delete_them(): void
     {
         User::factory()->create(['id' => 1]);
 
@@ -109,7 +109,42 @@ class ReservationCrudTest extends TestCase
         ]);
 
         $this->actingAs($user)->get(route('restaurants.edit', $otherRestaurant))->assertForbidden();
+        $this->actingAs($user)->delete(route('restaurants.destroy', $ownRestaurant))->assertForbidden();
         $this->actingAs($user)->delete(route('restaurants.destroy', $otherRestaurant))->assertForbidden();
+    }
+
+    public function test_admin_can_choose_restaurant_visibility_and_delete_restaurants(): void
+    {
+        $admin = User::factory()->create(['id' => 1]);
+        $owner = User::factory()->create();
+        $category = Category::create([
+            'name' => 'Fusion',
+            'slug' => 'fusion',
+        ]);
+
+        $this->actingAs($admin)->post(route('restaurants.store'), [
+            'category_id' => $category->id,
+            'owner_id' => $owner->id,
+            'name' => 'Admin Private Place',
+            'description' => 'Hidden restaurant',
+            'address' => 'Secret street',
+            'capacity' => 20,
+            'is_active' => '0',
+        ])->assertRedirect();
+
+        $restaurant = Restaurant::where('name', 'Admin Private Place')->firstOrFail();
+
+        $this->assertDatabaseHas('restaurants', [
+            'id' => $restaurant->id,
+            'owner_id' => $owner->id,
+            'is_active' => false,
+        ]);
+
+        $this->actingAs($admin)->delete(route('restaurants.destroy', $restaurant))->assertRedirect();
+
+        $this->assertDatabaseMissing('restaurants', [
+            'id' => $restaurant->id,
+        ]);
     }
 
     public function test_admin_can_manage_categories_but_regular_user_cannot(): void
